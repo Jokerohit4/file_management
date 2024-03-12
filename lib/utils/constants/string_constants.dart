@@ -1,0 +1,45 @@
+abstract class StringConstants {
+  static const String loginToDashBoardAccount = "Login to Dashboard Account";
+  static const String login = "Login";
+  static const String logOut = "Log Out";
+  static const String register = "Register";
+  static const String email = "Email*";
+  static const String password = "Password*";
+  static const String forgotYourPassword = "Forgot your password ?";
+  static const String orRegisterWith = "or register with";
+  static const String facebook = "Facebook";
+  static const String google = "Google";
+  static const String linkedIn = "LinkedIn";
+  static const String uploadDocuments = "Upload Documents";
+  static const String selectCategory = "Select Category";
+  static const String selectSubCategory = "Select Sub\n Category";
+  static const String description = "Description";
+  static const String dragAndDropYourFilesHere = "Drag & Drop your files here";
+  static const String or = "or";
+  static const String browseToUploadFiles = "Browse to upload files";
+  static const String upload = "Upload";
+  static const String yourUploadedFiles = "Your Uploaded Files";
+  static const String category = "Category";
+  static const String subCategory = "Sub Category";
+  static const String comments = "Comments";
+  static const String identity = "Identity";
+  static const String residence = "Residence";
+  static const String finance = "Finance";
+  static const String passport = "Passport";
+  static const String drivingLicense = "Driving License";
+  static const String aadharCard = "Aadhaar Card";
+  static const String waterBill = "Water Bill";
+  static const String electricityBill = "Electricity Bill";
+  static const String rentBill = "Rent Bill";
+  static const String salary = "Salary";
+  static const String food = "Food";
+  static const String drinks = "Drinks";
+  static const String fileUploadedAndDetails =
+      "File uploaded and details saved to Firestore successfully";
+  static const String userCancelledRequest = "User cancelled the picker request";
+  static const String fileToUploadFile = "Failed to upload file";
+  static const String categoryValue = "Category Value can't be empty";
+  static const String subCategoryValue = "Sub Category Value can't be empty";
+  static const String descriptionValue = "Description can't be empty";
+  static const String chooseCategoryFirst = " Choose category first";
+}
