@@ -8,16 +8,14 @@ class FileUploadAndDisplayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("assasasas");
-    print(MediaQuery.of(context).size.width);
     final isWide = MediaQuery.of(context).size.width > 600;
     return isWide
-    ? Row(
+    ? const Row(
       children: [
-        Expanded(child: UploadFileScreen()),
-        Expanded(child: UploadedFilesScreen()),
+        Flexible(flex: 9,child: UploadFileScreen()),
+        Flexible(flex: 7,child: UploadedFilesScreen()),
       ],
     )
-    : UploadFileScreen();
+    : const UploadFileScreen();
   }
 }

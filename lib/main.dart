@@ -10,6 +10,7 @@ import 'package:file_management/services/bloc/auth/auth_state.dart';
 import 'package:file_management/services/bloc/network/network_bloc.dart';
 import 'package:file_management/services/bloc/network/network_state.dart';
 import 'package:file_management/services/routes/routes.dart';
+import 'package:file_management/utils/styles/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -92,31 +93,32 @@ class MyApp extends StatelessWidget {
           return BlocBuilder<NetworkBloc, NetworkState>(
             builder: (context, state) {
               if (state is NetworkOffline) {
-                return const Text("No Internet Connection, non authenticated");
+                return const Scaffold(body: Center(child:Text("No Internet Connection, non authenticated")));
               } else if (state is NetworkOnline) {
-                return FileUploadAndDisplayScreen();
+                return const FileUploadAndDisplayScreen();
               } else {
             return  kIsWeb
-                ?   FileUploadAndDisplayScreen()
-                : CircularProgressIndicator();
+                ?   const FileUploadAndDisplayScreen()
+                : const CircularProgressIndicator();
               }
             },
           );
-        } else {
+        }
+        else {
           return BlocBuilder<NetworkBloc, NetworkState>(
             builder: (context, state) {
               if (state is NetworkOffline) {
-                return const Text("No Internet Connection, non authenticated");
+                return const Scaffold(body: Center(child: Text("No Internet Connection, non authenticated")));
               } else if (state is NetworkOnline) {
                 return BlocProvider(
                     create: (context) => SignUpSignInCubit(),
-                    child: const SignUpSignInScreen(isSignUp: true));
+                    child: const SignUpSignInScreen(isSignUp: false));
               } else {
                 return  kIsWeb
                 ? BlocProvider(
                     create: (context) => SignUpSignInCubit(),
-                    child: const SignUpSignInScreen(isSignUp: true))
-                    : CircularProgressIndicator();
+                    child: const SignUpSignInScreen(isSignUp: false))
+                    : const CircularProgressIndicator();
               }
             },
           );

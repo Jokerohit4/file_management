@@ -14,6 +14,7 @@ class UploadedFilesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<UploadedFilesCubit>().fetchData();
+    final isWide = MediaQuery.of(context).size.width > 600;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -31,9 +32,9 @@ class UploadedFilesScreen extends StatelessWidget {
                 } else if (state is UploadedFilesLoaded) {
                   return Expanded(
                     child: Table(
-                      columnWidths:  <int, TableColumnWidth>{
+                      columnWidths: <int, TableColumnWidth>{
                         0: FlexColumnWidth(),
-                        1: FixedColumnWidth(0.3.sw),
+                        1: FixedColumnWidth(isWide ? 0.15.sw : 0.35.sw),
                         2: FlexColumnWidth(),
                       },
                       children: [
@@ -41,7 +42,7 @@ class UploadedFilesScreen extends StatelessWidget {
                         divider(),
                         ...state.fileData.map((file) {
                           return TableRow(children: [
-                            Text(file.category).paddingSymmetric(),
+                            Text(file.category),
                             Text(file.subCategory),
                             Text(file.description),
                           ]);
@@ -58,17 +59,16 @@ class UploadedFilesScreen extends StatelessWidget {
             ),
             logoutButton(context),
           ],
-        ).paddingSymmetric(horizontal: 0.05.sw),
+        ).paddingSymmetric(horizontal: isWide ? 0.0.sw : 0.05.sw),
       ),
     );
   }
 
   TableRow heading() {
     return TableRow(children: [
-      Text(StringConstants.category, style: AppTextStyle.subtitleTextStyle),
-      Text(StringConstants.subCategory, style: AppTextStyle.subtitleTextStyle)
-          .paddingSymmetric(horizontal: 0.05.sw),
-      Text(StringConstants.description, style: AppTextStyle.subtitleTextStyle)
+      Text(StringConstants.category, style: AppTextStyle.labelTextStyle),
+      Text(StringConstants.subCategory, style: AppTextStyle.labelTextStyle),
+      Text(StringConstants.description, style: AppTextStyle.labelTextStyle)
     ]);
   }
 
@@ -88,7 +88,8 @@ class UploadedFilesScreen extends StatelessWidget {
           onTap: () => context.read<UploadedFilesCubit>().logout(context),
           child: Container(
             width: 0.3.sw,
-            padding: EdgeInsets.symmetric(vertical: 0.01.sh, horizontal: 0.05.sw),
+            padding:
+                EdgeInsets.symmetric(vertical: 0.01.sh, horizontal: 0.05.sw),
             margin: EdgeInsets.symmetric(vertical: 0.01.sh),
             color: AppColors.black,
             child: Center(

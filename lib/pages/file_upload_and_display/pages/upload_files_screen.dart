@@ -27,71 +27,76 @@ class UploadFileScreen extends StatelessWidget {
         body: SafeArea(
           child: Form(
             key: context.read<UploadFilesCubit>().formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(StringConstants.uploadDocuments,
-                            style: AppTextStyle.subtitleTextStyle)
-                        .paddingSymmetric(vertical: 0.05.sh),
-                   isWide? const SizedBox.shrink()
-                   : IconButton(
-                        onPressed: () => context
-                            .read<UploadFilesCubit>()
-                            .onClickOpenDrawer(),
-                        icon: const Icon(Icons.drive_file_move_sharp))
-                  ],
-                ),
-                Row(
-                  textBaseline: TextBaseline.ideographic,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          StringConstants.selectCategory,
-                          style: AppTextStyle.bodyTextStyle,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(StringConstants.uploadDocuments,
+                              style: AppTextStyle.subtitleTextStyle)
+                          .paddingSymmetric(vertical: 0.05.sh),
+                     isWide? const SizedBox.shrink()
+                     : IconButton(
+                          onPressed: () => context
+                              .read<UploadFilesCubit>()
+                              .onClickOpenDrawer(),
+                          icon: const Icon(Icons.drive_file_move_sharp))
+                    ],
+                  ),
+                  Row(
+                    textBaseline: TextBaseline.ideographic,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            StringConstants.selectCategory,
+                            style: AppTextStyle.bodyTextStyle,
+                          ),
+                          0.1.sh.heightSizedBox,
+                          Text(
+                            StringConstants.selectSubCategory,
+                            style: AppTextStyle.bodyTextStyle,
+                          ),
+                          0.15.sh.heightSizedBox,
+                          Text(
+                            StringConstants.description,
+                            style: AppTextStyle.bodyTextStyle,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 0.8.sh,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            dropDownWithBuilder(true,isWide),
+                            0.05.sh.heightSizedBox,
+                            dropDownWithBuilder(false,isWide),
+                            0.06.sh.heightSizedBox,
+                            descriptionField(context,isWide),
+                            dragAndDropBox(isWide),
+                            uploadButton(context,isWide),
+                          ],
                         ),
-                        0.1.sh.heightSizedBox,
-                        Text(
-                          StringConstants.selectSubCategory,
-                          style: AppTextStyle.bodyTextStyle,
-                        ),
-                        0.15.sh.heightSizedBox,
-                        Text(
-                          StringConstants.description,
-                          style: AppTextStyle.bodyTextStyle,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        dropDownWithBuilder(true,isWide),
-                        0.05.sh.heightSizedBox,
-                        dropDownWithBuilder(false,isWide),
-                        0.06.sh.heightSizedBox,
-                        descriptionField(context,isWide),
-                        dragAndDropBox(isWide),
-                        uploadButton(context,isWide),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ).paddingLTRB(left: 0.01.sw,right: isWide ? 0 : 0.04.sw)
+                      ),
+                    ],
+                  ),
+                ],
+              ).paddingLTRB(left: 0.01.sw,right: isWide ? 0 : 0.04.sw),
+            )
           ),
         ));
   }
 
   Widget descriptionField(BuildContext context,isWide) {
     return Container(
-      width: isWide? 0.28.sw : 0.5.sw,
+      width: isWide? 0.30.sw : 0.54.sw,
       height: 0.12.sh,
       margin: EdgeInsets.only(left: isWide ? 0.1.sw :0.2.sw),
       decoration: BoxDecoration(
@@ -127,8 +132,8 @@ class UploadFileScreen extends StatelessWidget {
                 color: Colors.grey.shade400,
                 strokeWidth: 1,
                 child: Container(
-                  width: isWide? 0.28.sw : 0.5.sw,
-                  height: kIsWeb ? 0.23.sh : isWide ? 0.17.sh : 0.23.sh,
+                  width: isWide? 0.30.sw : 0.54.sw,
+                  height: kIsWeb ? 0.23.sh : isWide ? 0.18.sh : 0.23.sh,
                   decoration: BoxDecoration(
                       color: AppColors.grey,
                       borderRadius: BorderRadius.circular(4)),
@@ -188,7 +193,7 @@ class UploadFileScreen extends StatelessWidget {
         ? context.read<UploadFilesCubit>().giveIndex(categoryValue) + 1
         : 0;
     return Container(
-      width: isWide ? 0.28.sw :0.55.sw,
+      width: isWide ? 0.30.sw :0.55.sw,
       height:isWide ? 0.1.sh : 0.07.sh,
       margin: EdgeInsets.only(left: isWide ? 0.1.sw :0.2.sw),
       decoration: BoxDecoration(
@@ -207,7 +212,7 @@ class UploadFileScreen extends StatelessWidget {
               : context.read<UploadFilesCubit>().subCategoryValidator(),
           decoration: InputDecoration(
             contentPadding:
-                EdgeInsets.symmetric(horizontal: kIsWeb? 0.03.sw : 0.007.sw, vertical: kIsWeb ? 0.02.sh : isWide ? 0 :0.01.sh),
+                EdgeInsets.symmetric(horizontal: kIsWeb? 0.03.sw : 0.007.sw, vertical: kIsWeb ? 0.02.sh : 0.02.sh),
             hintText: isCategory ? "Select Category" : "Sub Category",
             border: InputBorder.none,
             suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
@@ -237,7 +242,7 @@ class UploadFileScreen extends StatelessWidget {
           context.read<UploadFilesCubit>().onClickUploadButton(context),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 0.01.sh, horizontal: isWide ? 0.11.sw : 0.2.sw),
-        margin: EdgeInsets.only(left: isWide ? 0.1.sw:0.2.sw, top: isWide ? 0.005.sh: 0.02.sh),
+        margin: EdgeInsets.only(left: isWide ? 0.1.sw:0.2.sw, top: isWide ? 0.00.sh: 0.02.sh,bottom: 0.01.sh),
         color: AppColors.black,
         child: Center(
           child: Text(

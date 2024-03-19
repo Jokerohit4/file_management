@@ -41,7 +41,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(AuthLoadSuccess(userCredential.user!));
     } catch (e) {
-      emit(AuthLoadFailure(e.toString()));
+      print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      print(e);
+      if (e is FirebaseAuthException) {
+        String errorMessage = 'An unexpected error occurred.';
+        print(e.code);
+        if (e.code == 'user-not-found') {
+          errorMessage = 'User not found. Please sign up.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Incorrect password. Please try again.';
+        }
+        else if(e.code == "invalid-credential")
+          {
+            errorMessage = 'User not found. Check Email or Password';
+          }
+        emit(AuthLoadFailure(errorMessage));
+      } else {
+        emit(AuthLoadFailure(e.toString()));
+      }
     }
   }
 
@@ -49,17 +66,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthRegistrationRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoadInProgress());
     try {
-      final UserCredential userCredential =
           await _firebaseAuth.createUserWithEmailAndPassword(
         email: event.email,
         password: event.password,
-      );
-      Map<String,dynamic> userData = {
-        "email":event.email,
-        AppKeys.storage : "",
-      };
-      _storage.assignUser(userData,userCredential.user!.uid);
-      emit(AuthLoadSuccess(userCredential.user!));
+      ).then((userCredential) {
+            Map<String,dynamic> userData = {
+              "email":event.email,
+              AppKeys.storage : "",
+            };
+            _storage.assignUser(userData,userCredential.user!.uid);
+            emit(AuthLoadSuccess(userCredential.user!));
+          }
+          );
     } catch (e) {
       emit(AuthLoadFailure(e.toString()));
     }

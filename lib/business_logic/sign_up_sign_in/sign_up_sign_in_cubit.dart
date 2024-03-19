@@ -1,6 +1,7 @@
 import 'package:file_management/business_logic/sign_up_sign_in/sign_up_sign_in_state.dart';
 import 'package:file_management/services/bloc/auth/auth_bloc.dart';
 import 'package:file_management/services/bloc/auth/auth_event.dart';
+import 'package:file_management/services/bloc/auth/auth_state.dart';
 import 'package:file_management/utils/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ class SignUpSignInCubit extends Cubit<SignUpSignInState> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isLogin = true;
 
   get emailController => _emailController;
 
@@ -20,8 +22,10 @@ class SignUpSignInCubit extends Cubit<SignUpSignInState> {
 
   void tabValueUpdate(int value) {
     if (value == 1) {
+      isLogin = false;
       emit(SignUpSignInState(tabValue: 1));
     } else {
+      isLogin = true;
       emit(SignUpSignInState(tabValue: 0));
     }
   }
@@ -39,12 +43,14 @@ class SignUpSignInCubit extends Cubit<SignUpSignInState> {
 
 
 
-  void onPressLoginRegister(bool isSignUp, BuildContext context) {
+  void onPressLoginRegister(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      isSignUp ? _onPressRegister(context) : _onPressLogin(context);
+      isLogin ? _onPressLogin(context) : _onPressRegister(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: AppColors.white, content: Text('Failed to login',style: TextStyle(color: AppColors.red),)));
+        backgroundColor: AppColors.white,
+        content: Text('Please check your inputs.', style: TextStyle(color: AppColors.red)),
+      ));
     }
   }
 

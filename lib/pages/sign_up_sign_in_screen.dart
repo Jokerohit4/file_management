@@ -1,5 +1,7 @@
 import 'package:file_management/business_logic/sign_up_sign_in/sign_up_sign_in_cubit.dart';
 import 'package:file_management/business_logic/sign_up_sign_in/sign_up_sign_in_state.dart';
+import 'package:file_management/services/bloc/auth/auth_bloc.dart';
+import 'package:file_management/services/bloc/auth/auth_state.dart';
 import 'package:file_management/utils/constants/string_constants.dart';
 import 'package:file_management/utils/extensions/extension.dart';
 import 'package:file_management/utils/styles/app_colors.dart';
@@ -15,36 +17,51 @@ class SignUpSignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Form(
+    return BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoadFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  backgroundColor: AppColors.black,
+                  content: Text(state.message,
+                      style: const TextStyle(color: Colors.white)),
+                ),
+              );
+          }
+        },
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: SingleChildScrollView(
+              child: Form(
                 key: context.read<SignUpSignInCubit>().formKey,
                 child: Column(
-          children: [
-            0.15.sh.heightSizedBox,
-            Text(
-              StringConstants.loginToDashBoardAccount,
-              style: AppTextStyle.titleTextStyle,
-            ),
-            0.05.sh.heightSizedBox,
-            tabs(),
-            field(true, context),
-            field(false, context),
-            button(),
-            0.03.sh.heightSizedBox,
-            Row(
-              children: [
-                const Text(StringConstants.orRegisterWith),
-                textButtons(StringConstants.facebook,context),
-                textButtons(StringConstants.google,context),
-                textButtons(StringConstants.linkedIn,context),
-              ],
-            )
-          ],
-                ).paddingSymmetric(horizontal: MediaQuery.of(context).size.width / 12),
+                  children: [
+                    0.15.sh.heightSizedBox,
+                    Text(
+                      StringConstants.loginToDashBoardAccount,
+                      style: AppTextStyle.titleTextStyle,
+                    ),
+                    0.05.sh.heightSizedBox,
+                    tabs(),
+                    field(true, context),
+                    field(false, context),
+                    button(),
+                    0.03.sh.heightSizedBox,
+                    Row(
+                      children: [
+                        const Text(StringConstants.orRegisterWith),
+                        textButtons(StringConstants.facebook, context),
+                        textButtons(StringConstants.google, context),
+                        textButtons(StringConstants.linkedIn, context),
+                      ],
+                    )
+                  ],
+                ).paddingSymmetric(
+                    horizontal: MediaQuery.of(context).size.width / 12),
               ),
-        ));
+            )));
   }
 
   Widget tabs() {
@@ -92,7 +109,7 @@ class SignUpSignInScreen extends StatelessWidget {
             GestureDetector(
               onTap: () => context
                   .read<SignUpSignInCubit>()
-                  .onPressLoginRegister(isSignUp, context),
+                  .onPressLoginRegister(context),
               child: Container(
                 width: 0.3.sw,
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -109,9 +126,14 @@ class SignUpSignInScreen extends StatelessWidget {
               ),
             ),
             state.tabValue == 0
-                ? Text(
-                    StringConstants.forgotYourPassword,
-                    style: AppTextStyle.subtitleTextStyle,
+                ? GestureDetector(
+                    onTap: () => context
+                        .read<SignUpSignInCubit>()
+                        .onUnBuiltFunctions(context),
+                    child: Text(
+                      StringConstants.forgotYourPassword,
+                      style: AppTextStyle.subtitleTextStyle,
+                    ),
                   )
                 : const SizedBox.shrink(),
           ],
@@ -120,9 +142,11 @@ class SignUpSignInScreen extends StatelessWidget {
     );
   }
 
-  Widget textButtons(String txt,BuildContext context) {
+  Widget textButtons(String txt, BuildContext context) {
     return GestureDetector(
-      onTap: ()=>txt == StringConstants.google ? context.read<SignUpSignInCubit>().onPressGoogle(context) : context.read<SignUpSignInCubit>().onUnBuiltFunctions(context),
+      onTap: () => txt == StringConstants.google
+          ? context.read<SignUpSignInCubit>().onPressGoogle(context)
+          : context.read<SignUpSignInCubit>().onUnBuiltFunctions(context),
       child: Text(
         txt,
         style: AppTextStyle.subtitleTextStyle,
@@ -139,7 +163,7 @@ class SignUpSignInScreen extends StatelessWidget {
       controller: isEmail
           ? context.read<SignUpSignInCubit>().emailController
           : context.read<SignUpSignInCubit>().passwordController,
-      obscureText:!isEmail,
+      obscureText: !isEmail,
       decoration: InputDecoration(
         hintText: isEmail ? StringConstants.email : StringConstants.password,
         enabledBorder: OutlineInputBorder(

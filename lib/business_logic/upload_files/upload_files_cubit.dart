@@ -199,7 +199,9 @@ class UploadFilesCubit extends Cubit<UploadFilesState> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       PlatformFile file = result.files.first;
-      fileName = file.name.substring(0,10);
+    // fileName = file.name.substring(0,fileName.length >10 ? 10 : fileName.length);
+      fileName = file.name;
+      debugPrint(fileName);
       return file;
     } else {
       return null;
